@@ -6,7 +6,19 @@ public class StepTracker {
     int step;
     int goalDef = 10000;
 
-    Converter converter = new Converter();
+
+    static double stepKM(int count){
+        double oneStepKM = 0.00075;
+        double conStepKM;
+        return conStepKM = oneStepKM * count;
+    }
+
+    static double stepCal(int count){
+        double oneStepCal = 0.05;
+        double conStepCal;
+        return conStepCal = oneStepCal * count;
+    }
+
     MonthData[] monthToData;
 
     public StepTracker() {
@@ -32,8 +44,9 @@ public class StepTracker {
         int maxSet = 0;
 
         for(int i = 0; i < monthToData[month].days.length; i++) {
-            System.out.print((i+1) + " день: " + monthToData[month].days[i] + ", ");
-            if(i == 29){
+            if(i < 29) {
+                System.out.print((i + 1) + " день: " + monthToData[month].days[i] + ", ");
+            }else if(i == 29){
                 System.out.println((i+1) + " день: " + monthToData[month].days[i] + ".");
             }
         }
@@ -53,17 +66,28 @@ public class StepTracker {
 
         System.out.println("Среднее количество шагов за месяц: " + (count/30));
 
-        System.out.println("Пройденная дистанция (в км): " + converter.stepKM(count));
+        System.out.println("Пройденная дистанция (в км): " + stepKM(count));
 
-        System.out.println("Количество сожжённых килокалорий: " + converter.stepCal(count));
+        System.out.println("Количество сожжённых килокалорий: " + stepCal(count));
 
         for(int i = 0; i < monthToData[month].days.length; i++) {
             int[] setMax = new int[30];
 
-            if ((monthToData[month].days[i] >= goalDef) && (monthToData[month].days[i + 1] >= goalDef)) {
+            if(i < 29) {
+                if ((monthToData[month].days[i] >= goalDef) && (monthToData[month].days[i + 1] >= goalDef)) {
+                    countSet++;
+                } else if ((monthToData[month].days[i] >= goalDef) && (monthToData[month].days[i + 1] <= goalDef)) {
+                    countSet++;
+                }
+            } else if ((i == 29) && (monthToData[month].days[29] >= goalDef)){
                 countSet++;
-            } else if ((monthToData[month].days[i] >= goalDef) && (monthToData[month].days[i + 1] <= goalDef)) {
-                countSet++;
+                for (int k = 0; k < setMax.length; k++){
+                    setMax[k] = countSet;
+                    if (maxSet < setMax[k]) {
+                        maxSet = setMax[k];
+                    }
+                }
+                countSet = 0;
             }
 
             if (monthToData[month].days[i] <= goalDef){
@@ -80,7 +104,7 @@ public class StepTracker {
         System.out.println();
     }
 
-    void goalStep(int goal){
+    void setGoalStep(int goal){
         goalDef = goal;
     }
 }
