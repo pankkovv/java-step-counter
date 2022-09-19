@@ -6,19 +6,7 @@ public class StepTracker {
     int step;
     int goalDef = 10000;
 
-
-    static double stepKM(int count){
-        double oneStepKM = 0.00075;
-        double conStepKM;
-        return conStepKM = oneStepKM * count;
-    }
-
-    static double stepCal(int count){
-        double oneStepCal = 0.05;
-        double conStepCal;
-        return conStepCal = oneStepCal * count;
-    }
-
+    Converter converter = new Converter();
     MonthData[] monthToData;
 
     public StepTracker() {
@@ -66,9 +54,9 @@ public class StepTracker {
 
         System.out.println("Среднее количество шагов за месяц: " + (count/30));
 
-        System.out.println("Пройденная дистанция (в км): " + stepKM(count));
+        System.out.println("Пройденная дистанция (в км): " + converter.stepKM(count));
 
-        System.out.println("Количество сожжённых килокалорий: " + stepCal(count));
+        System.out.println("Количество сожжённых килокалорий: " + converter.stepCal(count));
 
         for(int i = 0; i < monthToData[month].days.length; i++) {
             int[] setMax = new int[30];
